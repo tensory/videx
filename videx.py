@@ -3,7 +3,7 @@
 import os
 import sys
 import xml.etree.ElementTree as ET
-from subprocess import call
+from subprocess import call, check_call
 
 # visit directory with video files
 # for each video file,
@@ -20,9 +20,10 @@ def process_files(in_dir, out_dir):
         if filename == '.DS_Store':
             continue
         shortname = os.path.splitext(filename)[0]
-        new_target_dir = setup_output_dir(os.path.join(out_dir, shortname))
-        print new_target_dir
-        #extract_frames(filename, shortname)
+        file_path = os.path.abspath(os.path.join(in_dir, filename))
+
+        new_target_dir = os.path.abspath(setup_output_dir(os.path.join(out_dir, shortname)))
+        extract_frames(file_path, shortname, new_target_dir)
         # Build up XML file conforming to Drawable Animation
         #print filename
 
@@ -32,10 +33,11 @@ def setup_output_dir(output_path):
         os.makedirs(output_path)
     return output_path
 
-def extract_frames(filename, shortname):
-    ffmpeg_args = "ffmpeg -i %s -r %d -f image2 %s-" % (filename, FRAME_RATE, shortname)
-    print ffmpeg_args
-    #call(ffmpeg_args + "%3d.png")
+def extract_frames(file_path, shortname, output_directory):
+    ffmpeg_args = "ffmpeg -i %s -r %d -f image2 %s-" % (file_path, FRAME_RATE, os.path.join(output_directory, "img"))
+    ffmpeg_args = ffmpeg_args + "%3d.png"
+    if (os.path.exists(output_directory)):
+        check_call(ffmpeg_args, shell=True)
 
 
 path = sys.argv[1]
