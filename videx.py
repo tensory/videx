@@ -37,7 +37,7 @@ def extract_frames(file_path, shortname, output_directory):
     ffmpeg_args = "ffmpeg -i %s -r %d -f image2 %s-" % (file_path, FRAME_RATE, os.path.join(output_directory, "img"))
     ffmpeg_args = ffmpeg_args + "%3d.png"
     if (os.path.exists(output_directory)):
-        check_call(ffmpeg_args, shell=True)
+        call(ffmpeg_args, shell=True)
 
 
 path = sys.argv[1]
