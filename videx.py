@@ -14,6 +14,7 @@ from subprocess import call, check_call
 
 OUTPUT_ROOT_DIR = "videx_output"
 FRAME_RATE = 30
+DURATION = 50
 
 def process_files(in_dir, out_dir):
     for filename in os.listdir(in_dir):
@@ -22,10 +23,11 @@ def process_files(in_dir, out_dir):
         shortname = os.path.splitext(filename)[0]
         file_path = os.path.abspath(os.path.join(in_dir, filename))
 
-        new_target_dir = os.path.abspath(setup_output_dir(os.path.join(out_dir, shortname)))
-        extract_frames(file_path, shortname, new_target_dir)
+        file_target_dir = os.path.abspath(setup_output_dir(os.path.join(out_dir, shortname)))
+        extract_frames(file_path, shortname, file_target_dir)
         # Build up XML file conforming to Drawable Animation
-        #print filename
+        make_xml_file(shortname=shortname, img_path=file_target_dir, write_to_path=out_dir)
+    print "Done.\r"
 
 
 def setup_output_dir(output_path):
@@ -33,12 +35,44 @@ def setup_output_dir(output_path):
         os.makedirs(output_path)
     return output_path
 
+
 def extract_frames(file_path, shortname, output_directory):
-    ffmpeg_args = "ffmpeg -i %s -r %d -f image2 %s-" % (file_path, FRAME_RATE, os.path.join(output_directory, "img"))
+    ffmpeg_args = "ffmpeg -i %s -r %d -f image2 %s_" % (file_path, FRAME_RATE, os.path.join(output_directory, shortname))
     ffmpeg_args = ffmpeg_args + "%3d.png"
     if (os.path.exists(output_directory)):
         call(ffmpeg_args, shell=True)
 
+
+def make_xml_file(shortname, img_path, write_to_path):
+    root = ET.Element("animation-list", {
+        "xmlns:android": "http://schemas.android.com/apk/res/android"
+    })
+    for filename in os.listdir(img_path):
+        item = ET.SubElement(root, "item", {
+            "android:drawable": "@drawable/%s" % os.path.splitext(filename)[0],
+            "android:duration": str(DURATION)
+        })
+        root.append(item)
+    indent(root)
+    tree = ET.ElementTree(root)
+    outfile = os.path.abspath(os.path.join(write_to_path, shortname + ".xml"))
+    tree.write(outfile)
+
+
+def indent(elem, level=0):
+    i = "\n" + level*"  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+        for elem in elem:
+            indent(elem, level+1)
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
 
 path = sys.argv[1]
 if not path:
@@ -54,9 +88,7 @@ if __name__ == '__main__':
     process_files(in_dir=path, out_dir=output_directory)
 
 
-root = ET.Element("animation-list", {
-    "xmlns:android": "http://schemas.android.com/apk/res/android"
-})
+
 
 tree = ET.ElementTree()
 
