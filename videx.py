@@ -54,7 +54,7 @@ def make_xml_file(shortname, img_path, write_to_path):
 
     indent(root)
     tree = ET.ElementTree(root)
-    outfile = os.path.abspath(os.path.join(write_to_path, shortname + ".xml"))
+    outfile = os.path.abspath(os.path.join(write_to_path, shortname.lower() + ".xml"))
     tree.write(outfile)
 
 
