@@ -52,7 +52,6 @@ def make_xml_file(shortname, img_path, write_to_path):
             "android:drawable": "@drawable/%s" % os.path.splitext(filename)[0],
             "android:duration": str(DURATION)
         })
-        root.append(item)
     indent(root)
     tree = ET.ElementTree(root)
     outfile = os.path.abspath(os.path.join(write_to_path, shortname + ".xml"))
