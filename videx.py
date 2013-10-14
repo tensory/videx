@@ -37,7 +37,8 @@ def setup_output_dir(output_path):
 
 
 def extract_frames(file_path, shortname, output_directory):
-    ffmpeg_args = "ffmpeg -i %s -r %d -f image2 %s_" % (file_path, FRAME_RATE, os.path.join(output_directory, shortname))
+    # Android requires drawable filenames to be lowercase
+    ffmpeg_args = "ffmpeg -i %s -r %d -f image2 %s_" % (file_path, FRAME_RATE, os.path.join(output_directory, shortname.lower()))
     ffmpeg_args = ffmpeg_args + "%3d.png"
     if (os.path.exists(output_directory)):
         call(ffmpeg_args, shell=True)
@@ -48,10 +49,12 @@ def make_xml_file(shortname, img_path, write_to_path):
         "xmlns:android": "http://schemas.android.com/apk/res/android"
     })
     for filename in os.listdir(img_path):
+        # Android requires drawable filenames to be lowercase
         item = ET.SubElement(root, "item", {
-            "android:drawable": "@drawable/%s" % os.path.splitext(filename)[0],
+            "android:drawable": "@drawable/%s" % os.path.splitext(filename)[0].lower(),
             "android:duration": str(DURATION)
         })
+
     indent(root)
     tree = ET.ElementTree(root)
     outfile = os.path.abspath(os.path.join(write_to_path, shortname + ".xml"))
@@ -73,10 +76,9 @@ def indent(elem, level=0):
         if level and (not elem.tail or not elem.tail.strip()):
             elem.tail = i
 
+# Pass in path to video files on command line
+# e.g. /Users/ari/Documents/video_files
 path = sys.argv[1]
-if not path:
-    path = '/Users/ari/Documents/Consulting/2013/Erogear/video_files'
-
 
 if __name__ == '__main__':
     # Get output directory
@@ -85,8 +87,6 @@ if __name__ == '__main__':
 
     # Start putting extracted files into directory
     process_files(in_dir=path, out_dir=output_directory)
-
-
 
 
 tree = ET.ElementTree()
