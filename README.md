@@ -7,7 +7,7 @@ It converts video files (*.avi, etc) into AnimationDrawable batches that you can
 
 Requirements
 ------------
-Videx is based on [http://linuxers.org/tutorial/how-extract-images-video-using-ffmpeg](ffmpeg). If you don't have that, install it by your favorite means. I used Homebrew: `brew install ffmpeg`
+Videx is based on [ffmpeg](http://linuxers.org/tutorial/how-extract-images-video-using-ffmpeg). If you don't have that, install it by your favorite means. I used Homebrew: `brew install ffmpeg`
 
 It is limited to processing the media file types that ffmpeg understands.
 
