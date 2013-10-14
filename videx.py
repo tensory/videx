@@ -1,16 +1,13 @@
 #!/usr/bin/env python
 
+# Convert AVI files to a batch of still PNG images
+# to be drawn as an AnimationDrawable.
+# Also generate the AnimationDrawable XML file.
+
 import os
 import sys
 import xml.etree.ElementTree as ET
-from subprocess import call, check_call
-
-# visit directory with video files
-# for each video file,
-# if extracted directory doesn't already exist for file,
-# do extraction on it
-# then visit extracted directory to build up xml
-
+from subprocess import call
 
 OUTPUT_ROOT_DIR = "videx_output"
 FRAME_RATE = 30
@@ -87,7 +84,3 @@ if __name__ == '__main__':
 
     # Start putting extracted files into directory
     process_files(in_dir=path, out_dir=output_directory)
-
-
-tree = ET.ElementTree()
-
