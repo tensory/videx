@@ -15,9 +15,9 @@ Usage
 -----
 `python videx.py /Full/path/to/your/source/video/directory`
 
-The script does not destroy original files, but it must have write permissions in the video source directory.
+The script does not destroy original files, but it must have write permissions in the parent of the video source directory.
 
-It will create a directory called `videx_output` with Android-ready XML files and subfolders containing animation frames.
+It will create a sibling directory called `videx_output` with Android-ready XML files and subfolders containing animation frames.
 
 License
 -------
