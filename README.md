@@ -11,10 +11,6 @@ Videx is based on [http://linuxers.org/tutorial/how-extract-images-video-using-f
 
 It is limited to processing the media file types that ffmpeg understands.
 
-Installation
-------------
-TODO: fix setup.py...
-
 Usage
 -----
 `python videx.py /Full/path/to/your/source/video/directory`
