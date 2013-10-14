@@ -13,18 +13,15 @@ It is limited to processing the media file types that ffmpeg understands.
 
 Installation
 ------------
-1. Download this repository .tar.gz and extract it
-2.
-```
-cd videx
-python setup.py
-```
+TODO: fix setup.py...
 
 Usage
 -----
-`videx /Full/path/to/your/source/video/directory`
+`python videx.py /Full/path/to/your/source/video/directory`
 
-Videx does not destroy original files, but the script must have write permissions in the video source directory. It will create a directory called `videx_output` with XML files and subfolders containing animation frames.
+The script does not destroy original files, but it must have write permissions in the video source directory.
+
+It will create a directory called `videx_output` with Android-ready XML files and subfolders containing animation frames.
 
 License
 -------
